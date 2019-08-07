@@ -11,6 +11,29 @@ opt_priority = {
 }
 
 
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        pass
+
+    try:
+        import unicodedata
+        unicodedata.numeric(s)
+        return True
+    except (TypeError, ValueError):
+        pass
+    return False
+
+
+def get_opt_data(s):
+    if is_number(s):
+        return float(s)
+    else:
+        return s
+
+
 def get_opt_priority(opt):
     if len(opt) > 1:
         return opt_priority[opt[0]]
@@ -29,7 +52,7 @@ def rpn_encode(line):
         if line[rid] in opt_priority:
             if rid > lid:
                 # 如果遇到符号，证明lid指向的是操作数，遇到操作数直接输出
-                prn_list.append("".join(line[lid:rid]))
+                prn_list.append(get_opt_data("".join(line[lid:rid])))
 
             if line[rid] != ',' and (len(opt_list) == 0 or opt_list[-1] == '(' or get_opt_priority(line[rid]) > get_opt_priority(opt_list[-1])):
                 # 如果符号堆栈栈顶没有元素或者为“(”，或者自己优先级比栈顶的高，直接存入（“,”不做存入和输出）
@@ -66,7 +89,7 @@ def rpn_encode(line):
         elif line[rid] == ')' or line[rid] == ']':
             if rid > lid:
                 # 遇到")"时说明之前有操作数
-                prn_list.append("".join(line[lid:rid]))
+                prn_list.append(get_opt_data("".join(line[lid:rid])))
 
             # 将运算符堆栈的元素不断输出，直到遇到“(”时把它丢弃并停止。
             while len(opt_list) > 0 and opt_list[-1] != '(':
@@ -82,7 +105,7 @@ def rpn_encode(line):
             rid += 1
 
     if rid != lid:
-        prn_list.append("".join(line[lid:rid]))
+        prn_list.append(get_opt_data("".join(line[lid:rid])))
     while len(opt_list) > 0:
         prn_list.append(opt_list.pop())
     return prn_list
