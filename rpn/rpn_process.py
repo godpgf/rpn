@@ -18,7 +18,7 @@ def get_opt_priority(opt):
         return opt_priority[opt]
 
 
-def prn_encode(line):
+def rpn_encode(line):
     # line中不能有空格
     line = list(line)
     lid, rid = 0, 0

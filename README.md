@@ -20,9 +20,9 @@
 
 
 ```python
-from rpn import prn_encode
+from rpn import rpn_encode
 line = "loss = a + 0.4 * b + fun((a + b) * c, d, e) + concat([a, b, c, d, e], 1)"
-print(prn_encode(line.replace(" ","")))
+print(rpn_encode(line.replace(" ","")))
 ```
 
 > 输出：['loss', 'a', '0.4', 'b', '*', '+', '@', 'a', 'b', '+', 'c', '*', 'd', 'e', '@fun', '+', '@', '@', 'a', 'b', 'c', 'd', 'e', '@array', '1', '@concat', '+', '=']

@@ -1,1 +1,1 @@
-from .prn_process import prn_encode
+from .rpn_process import rpn_encode
