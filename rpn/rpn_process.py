@@ -41,6 +41,15 @@ def get_opt_priority(opt):
         return opt_priority[opt]
 
 
+def is_minus_sign(line, id):
+    # 判断是否是负号
+    if line[id] != '-':
+        return False
+    if is_number(line[id+1]):
+        return True
+    return False
+
+
 def rpn_encode(line):
     # line中不能有空格
     line = list(line)
@@ -49,7 +58,7 @@ def rpn_encode(line):
     prn_list = []
     # lid一定是指向操作数或者函数的起点
     while rid < len(line):
-        if line[rid] in opt_priority:
+        if line[rid] in opt_priority and not is_minus_sign(line, rid):
             if rid > lid:
                 # 如果遇到符号，证明lid指向的是操作数，遇到操作数直接输出
                 prn_list.append(get_opt_data("".join(line[lid:rid])))
