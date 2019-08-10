@@ -31,7 +31,7 @@ def get_opt_data(s):
     if is_number(s):
         return float(s)
     else:
-        return s
+        return s.replace(" ", "")
 
 
 def get_opt_priority(opt):
@@ -88,13 +88,37 @@ def rpn_encode(line):
             lid = rid + 1
             rid = lid
         elif line[rid] == '[':
-            assert lid == rid
-            # 遇到的是数组，当做函数处理
-            prn_list.append("@")
-            opt_list.append("@array")
-            opt_list.append("(")
-            lid = rid + 1
-            rid = lid
+            if lid == rid:
+                # 之前没有操作数
+                # 遇到的是数组，当做函数处理
+                prn_list.append("@")
+                opt_list.append("@array")
+                opt_list.append("(")
+                lid = rid + 1
+                rid = lid
+            else:
+                # 之前有操作数，有可能是从数组中取元素，也有可能是设置数组中的元素
+                tid = rid + 1
+                while line[tid] != ']':
+                    tid += 1
+                    assert tid < len(line)
+                if tid < len(line) - 1 and line[tid + 1] == '=':
+                    is_set = True
+                else:
+                    is_set = False
+
+                if is_set:
+                    prn_list.append("@")
+                    prn_list.append(get_opt_data("".join(line[lid:rid])))
+                    opt_list.append("@set")
+                    opt_list.append("(")
+                else:
+                    prn_list.append("@")
+                    prn_list.append(get_opt_data("".join(line[lid:rid])))
+                    opt_list.append("@get")
+                    opt_list.append("(")
+                lid = rid + 1
+                rid = lid
         elif line[rid] == ')' or line[rid] == ']':
             if rid > lid:
                 # 遇到")"时说明之前有操作数

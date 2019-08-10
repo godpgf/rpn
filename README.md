@@ -21,8 +21,11 @@
 
 ```python
 from rpn import rpn_encode
-line = "loss = a + 0.4 * b + fun((a + b) * c, d, e) + concat([a, b, c, d, e], 1)"
-print(rpn_encode(line.replace(" ","")))
+line = "loss = a + 0.4 * b + fun((a + b) * c, d, e) + concat([a, b, c, d[4], e], 1)"
+print(rpn_encode(line.replace(" ", "")))
+line = "kk[5] = 4"
+print(rpn_encode(line.replace(" ", "")))
 ```
 
-> 输出：['loss', 'a', '0.4', 'b', '*', '+', '@', 'a', 'b', '+', 'c', '*', 'd', 'e', '@fun', '+', '@', '@', 'a', 'b', 'c', 'd', 'e', '@array', '1', '@concat', '+', '=']
+> 输出：['loss', 'a', 0.4, 'b', '*', '+', '@', 'a', 'b', '+', 'c', '*', 'd', 'e', '@fun', '+', '@', '@', 'a', 'b', 'c', '@', 'd', 4.0, '@get', 'e', '@array', 1.0, '@concat', '+', '=']
+> 输出：['@', 'kk', 5.0, '@set', 4.0, '=']
