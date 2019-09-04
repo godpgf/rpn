@@ -45,14 +45,26 @@ def is_minus_sign(line, id):
     # 判断是否是负号
     if line[id] != '-':
         return False
-    if is_number(line[id+1]) and (id == 0 or (line[id-1] != ')' and line[id-1] not in opt_priority)):
+    if id == 0 or (line[id-1] != ')' and line[id-1] in opt_priority):
         return True
     return False
 
 
+def replace_fun_minus_sign(line):
+    tmp_line = []
+    id = 0
+    while id < len(line):
+        if is_minus_sign(line, id) and not is_number(line[id+1]):
+            tmp_line.extend(["-", "1", "*"])
+        else:
+            tmp_line.append(line[id])
+        id += 1
+    return tmp_line
+
+
 def rpn_encode(line):
-    # line中不能有空格
-    line = list(line)
+    # line中不能有空格，如果是-fun()就变成-1*fun()
+    line = replace_fun_minus_sign(list(line))
     lid, rid = 0, 0
     opt_list = []
     prn_list = []

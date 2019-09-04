@@ -23,7 +23,9 @@
 from rpn import rpn_encode
 line = "loss = a + 0.4 * b + fun((a + b) * c, d, e) + concat([a, b, c, d[4], e], 1)"
 print(rpn_encode(line.replace(" ", "")))
-line = "kk[5] = 4"
+line = "kk[5] = 4 * -1"
+print(rpn_encode(line.replace(" ", "")))
+line = "dd=-k[5]"
 print(rpn_encode(line.replace(" ", "")))
 ```
 
