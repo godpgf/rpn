@@ -45,7 +45,7 @@ def is_minus_sign(line, id):
     # 判断是否是负号
     if line[id] != '-':
         return False
-    if id == 0 or (line[id-1] != ')' and line[id-1] in opt_priority):
+    if id == 0 or (line[id-1] != ')' and (line[id-1] in opt_priority or line[id-1] == '[' or line[id-1] == ']')):
         return True
     return False
 
