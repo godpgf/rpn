@@ -70,7 +70,19 @@ def rpn_encode(line):
     prn_list = []
     # lid一定是指向操作数或者函数的起点
     while rid < len(line):
-        if line[rid] in opt_priority and not is_minus_sign(line, rid):
+        if line[rid] == '"':
+            # 处理字符串
+            assert lid == rid
+            # 当前是字符串
+            lid = rid + 1
+            rid = lid
+            while rid != '"':
+                assert rid < len(line)
+                rid += 1
+            prn_list.append("".join(line[lid:rid]))
+            lid = rid + 1
+            rid = lid
+        elif line[rid] in opt_priority and not is_minus_sign(line, rid):
             if rid > lid:
                 # 如果遇到符号，证明lid指向的是操作数，遇到操作数直接输出
                 prn_list.append(get_opt_data("".join(line[lid:rid])))
