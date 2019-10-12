@@ -76,7 +76,7 @@ def rpn_encode(line):
             # 当前是字符串
             lid = rid + 1
             rid = lid
-            while rid != '"':
+            while line[rid] != '"':
                 assert rid < len(line)
                 rid += 1
             prn_list.append("".join(line[lid:rid]))
