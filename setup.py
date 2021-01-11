@@ -8,6 +8,11 @@ try: # for pip >= 10
 except ImportError: # for pip <= 9.0.3
     from pip.req import parse_requirements
 
+try:
+    requirements = [str(ir.req) for ir in parse_requirements("requirements.txt", session=False)]
+except:
+    requirements = [str(ir.requirement) for ir in parse_requirements("requirements.txt", session=False)]
+
 
 setup(
     name='rpn',
@@ -18,7 +23,7 @@ setup(
     author_email='godpgf@qq.com',
     package_data={'': ['*.*']},
     url='',
-    install_requires=[str(ir.req) for ir in parse_requirements("requirements.txt", session=False)],
+    install_requires=requirements,
     zip_safe=False,
     #entry_points={
     #    "console_scripts": [
